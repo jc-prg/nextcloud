@@ -10,29 +10,29 @@ services:
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     restart: unless-stopped
     volumes:
-      - ${DIR_DATA_MARIADB|./data/mariadb}/db:/var/lib/mysql
-      - ${DIR_DATA_MARIADB|./data/mariadb}/etc:/etc/mysql
+      - ${DIR_DATA_MARIADB:./data/mariadb}/db:/var/lib/mysql
+      - ${DIR_DATA_MARIADB:./data/mariadb}/etc:/etc/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD|randomPassword}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD|randomPassword}
-      - MYSQL_DATABASE=${MYSQL_DATABASE|nextcloud}
-      - MYSQL_USER=${MYSQL_USER|nextcloud}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:randomPassword}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:randomPassword}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:nextcloud}
+      - MYSQL_USER=${MYSQL_USER:nextcloud}
 
   db_backup:
     container_name: ${DB_BACKUP_CONTAINER}
     build: 
       context: ./images/db-backup
       args:
-        - CRON_CMD=${DB_BACKUP_CRON_CMD|0 5 * * *}
+        - CRON_CMD=${DB_BACKUP_CRON_CMD:0 5 * * *}
     restart: unless-stopped
     depends_on:
       - db
     environment:
       - DB_BACKUP_HOST=${MYSQL_CONTAINER}
-      - DB_BACKUP_PASSWORD=${MYSQL_ROOT_PASSWORD|randomPassword}
-      - DB_BACKUP_NAME=${MYSQL_DATABASE|nextcloud}
+      - DB_BACKUP_PASSWORD=${MYSQL_ROOT_PASSWORD:randomPassword}
+      - DB_BACKUP_NAME=${MYSQL_DATABASE:nextcloud}
     volumes:
-      - ${DIR_DATA_BACKUP|./data/backup}:/backup
+      - ${DIR_DATA_BACKUP:./data/backup}:/backup
 
   app:
     container_name: ${NEXTCLOUD_CONTAINER}
@@ -41,37 +41,37 @@ services:
       - db
     restart: unless-stopped
     ports:
-      - ${PORT_HTTP|9080}:80
-      - ${PORT_HTTPS|9443}:443
+      - ${PORT_HTTP:9080}:80
+      - ${PORT_HTTPS:9443}:443
     volumes:
-      - ${DIR_DATA_NEXTCLOUD|./data/app}/apps:/var/www/html/apps
-      - ${DIR_DATA_NEXTCLOUD|./data/app}/config:/var/www/html/config
-      - ${DIR_DATA_NEXTCLOUD|./data/app}/data:/var/www/html/data
+      - ${DIR_DATA_NEXTCLOUD:./data/app}/apps:/var/www/html/apps
+      - ${DIR_DATA_NEXTCLOUD:./data/app}/config:/var/www/html/config
+      - ${DIR_DATA_NEXTCLOUD:./data/app}/data:/var/www/html/data
     environment:
-      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER|nextcloud}
-      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD|nextcloud}
-      - NEXTCLOUD_DATA_DIR=${NEXTCLOUD_DATA_DIR|/var/www/html/data}
-      - NEXTCLOUD_TABLE_PREFIX=${NEXTCLOUD_TABLE_PREFIX|}
-      - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS|}
-      - NEXTCLOUD_UPDATE=${NEXTCLOUD_TRUSTED_DOMAINS|0}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD|randomPassword}
-      - MYSQL_DATABASE=${MYSQL_DATABASE|nextcloud}
-      - MYSQL_USER=${MYSQL_USER|nextcloud}
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER:nextcloud}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD:nextcloud}
+      - NEXTCLOUD_DATA_DIR=${NEXTCLOUD_DATA_DIR:/var/www/html/data}
+      - NEXTCLOUD_TABLE_PREFIX=${NEXTCLOUD_TABLE_PREFIX:}
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS:}
+      - NEXTCLOUD_UPDATE=${NEXTCLOUD_TRUSTED_DOMAINS:0}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:randomPassword}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:nextcloud}
+      - MYSQL_USER=${MYSQL_USER:nextcloud}
       - MYSQL_HOST=${MYSQL_CONTAINER}
-      - SMTP_HOST=${SMTP_HOST|}
-      - SMTP_SECURE=${SMTP_SECURE|}
-      - SMTP_PORT=${SMTP_PORT|465}
-      - SMTP_AUTHTYPE=${SMTP_AUTHTYPE|LOGIN}
-      - SMTP_NAME=${SMTP_NAME|}
-      - SMTP_PASSWORD=${SMTP_PASSWORD|}
-      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS|}
-      - MAIL_DOMAIN=${MAIL_DOMAIN|}
-      - APACHE_DISABLE_REWRITE_IP=${APACHE_DISABLE_REWRITE_IP|}
-      - TRUSTED_PROXIES=${TRUSTED_PROXIES|}
-      - OVERWRITEHOST=${OVERWRITEHOST|}
-      - OVERWRITEPROTOCOL=${OVERWRITEPROTOCOL|}
-      - OVERWRITEWEBROOT=${OVERWRITEWEBROOT|}
-      - OVERWRITECONDADDR=${OVERWRITECONDADDR|}
+      - SMTP_HOST=${SMTP_HOST:}
+      - SMTP_SECURE=${SMTP_SECURE:}
+      - SMTP_PORT=${SMTP_PORT:465}
+      - SMTP_AUTHTYPE=${SMTP_AUTHTYPE:LOGIN}
+      - SMTP_NAME=${SMTP_NAME:}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS:}
+      - MAIL_DOMAIN=${MAIL_DOMAIN:}
+      - APACHE_DISABLE_REWRITE_IP=${APACHE_DISABLE_REWRITE_IP:}
+      - TRUSTED_PROXIES=${TRUSTED_PROXIES:}
+      - OVERWRITEHOST=${OVERWRITEHOST:}
+      - OVERWRITEPROTOCOL=${OVERWRITEPROTOCOL:}
+      - OVERWRITEWEBROOT=${OVERWRITEWEBROOT:}
+      - OVERWRITECONDADDR=${OVERWRITECONDADDR:}
     entrypoint: |
       bash -c 'bash -s <<EOF
         trap "break;exit" SIGHUP SIGINT SIGTERM
@@ -145,4 +145,4 @@ services:
       - app
     restart: unless-stopped
     environment:
-      - NEWS_PASSWORD=${NEXTCLOUD_UPDATER_PWD|GenerateNewPassword}
+      - NEWS_PASSWORD=${NEXTCLOUD_UPDATER_PWD:GenerateNewPassword}
