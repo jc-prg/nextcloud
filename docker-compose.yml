@@ -21,7 +21,7 @@ services:
   db_backup:
     container_name: ${DB_BACKUP_CONTAINER}
     build: 
-      context: ./images/db-backup
+      context: ${DB_BACKUP_IMAGE}
       args:
         - CRON_CMD=${DB_BACKUP_CRON_CMD:-0 5 * * *}
     restart: unless-stopped
