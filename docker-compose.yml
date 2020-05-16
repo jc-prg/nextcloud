@@ -6,7 +6,7 @@ services:
 
   db:
     container_name: ${MYSQL_CONTAINER}
-    image: ${MYSQL_IMAGE|mariadb}
+    image: ${MYSQL_IMAGE}
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     restart: unless-stopped
     volumes:
@@ -139,8 +139,8 @@ services:
 #https://github.com/nextcloud/news-updater
 
   news-updater:
-    container_name: ${NEXTCLOUD_UPDATER_CONTAINER|nextcloud-news_updater}
-    build: ${NEXTCLOUD_UPDATER_IMAGE|./images/updater_arm}
+    container_name: ${NEXTCLOUD_UPDATER_CONTAINER}
+    build: ${NEXTCLOUD_UPDATER_IMAGE}
     depends_on:
       - app
     restart: unless-stopped
