@@ -85,9 +85,9 @@ services:
           sleep 15m
         done
       EOF'
-    networks:
-      - proxy-tier
-      - default
+#    networks:
+#      - proxy-tier
+#      - default
  
 #https://github.com/nextcloud/docker/blob/master/.examples/docker-compose/with-nginx-proxy/mariadb/apache/docker-compose.yml     
 #  proxy:
@@ -124,6 +124,7 @@ services:
 #  certs:
 #  vhost.d:
 #  html:
+
 #networks:
 #  proxy-tier:
 
