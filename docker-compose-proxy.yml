@@ -1,5 +1,5 @@
 #---------------------------------------------
-# nextcloud configuration without proxy
+# nextcloud configuration with proxy & letsencrypt / IN PROGESS !!!
 #---------------------------------------------
 # $ cp sample.env .env  # create configuration
 # $ ./gen-password      # create strong password
@@ -89,5 +89,58 @@ services:
       - proxy-tier
       - default
  
+#https://github.com/nextcloud/docker/blob/master/.examples/docker-compose/with-nginx-proxy/mariadb/apache/docker-compose.yml     
+#  proxy:
+#    build: ./proxy
+#    restart: always
+#    ports:
+#      - 80:80
+#      - 443:443
+#    labels:
+#      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+#    volumes:
+#      - certs:/etc/nginx/certs:ro
+#      - vhost.d:/etc/nginx/vhost.d
+#      - html:/usr/share/nginx/html
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#    networks:
+#      - proxy-tier
+#
+#  letsencrypt-companion:
+#    image: jrcs/letsencrypt-nginx-proxy-companion
+#    restart: always
+#    volumes:
+#      - certs:/etc/nginx/certs
+#      - vhost.d:/etc/nginx/vhost.d
+#      - html:/usr/share/nginx/html
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    networks:
+#      - proxy-tier
+#    depends_on:
+#      - proxy
+#volumes:
+#  db:
+#  nextcloud:
+#  certs:
+#  vhost.d:
+#  html:
+
 networks:
   proxy-tier:
+
+
+# Idea -> proxy + letsencrypt: https://github.com/nextcloud/docker/blob/master/.examples/docker-compose/with-nginx-proxy/mariadb/apache/docker-compose.yml
+# Idea -> smtp container: https://github.com/namshi/docker-smtp/blob/master/docker-compose.yml
+# Idea -> cron for nextcloud: https://help.nextcloud.com/t/docker-cron-include-cron-through-docker-compose-file/46126
+
+
+#https://github.com/nextcloud/news-updater
+
+#  news-updater:
+#    container_name: ${NEXTCLOUD_UPDATER_CONTAINER}
+#    build: ${NEXTCLOUD_UPDATER_IMAGE:-./images/updater}
+#    depends_on:
+#      - app
+#    restart: unless-stopped
+#    environment:
+#      - NEWS_PASSWORD=${NEXTCLOUD_UPDATER_PWD:-GenerateNewPassword}
