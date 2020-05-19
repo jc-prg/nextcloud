@@ -36,10 +36,11 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
-4. Additional settings (to be automated)
+4. Configure separate proxy server incl. letsencrypt, if required (included proxy in progress but not ready yet)
 
-  * configure proxy (e.g. nginx) incl. letsencrypt
-  * add trusted domains, if required ( ./data/nextcloud/config/config.php)
+5. Run the first time and create admin account
+
+6. Add trusted domains, if required ( ./data/nextcloud/config/config.php) - the first entry will be set during the first run
     ```bash
     array (
        0 => '<your 1st domain>',
@@ -47,6 +48,7 @@ $ docker-compose up -d
        2 => '<your 3rd domain>',
     ),
     ```
+
 
 ## Sources and inspiration (in progress)
 
