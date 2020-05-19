@@ -48,14 +48,13 @@ services:
 
   app:
     container_name: ${NEXTCLOUD_CONTAINER}
-    build: 
-      context: ${NEXTCLOUD_IMAGE:-./images/nextcloud}
+    build: ${NEXTCLOUD_IMAGE:-./images/nextcloud}
     depends_on:
       - db
     restart: unless-stopped
-    ports:
-      - ${PORT_HTTP:-9080}:80
-      - ${PORT_HTTPS:-9443}:443
+#    ports:
+#      - ${PORT_HTTP:-9080}:80
+#      - ${PORT_HTTPS:-9443}:443
     volumes:
       - ${DIR_DATA_NEXTCLOUD:-./data/app}/apps:/var/www/html/apps
       - ${DIR_DATA_NEXTCLOUD:-./data/app}/config:/var/www/html/config
@@ -85,45 +84,48 @@ services:
       - OVERWRITEPROTOCOL=${OVERWRITEPROTOCOL:-}
       - OVERWRITEWEBROOT=${OVERWRITEWEBROOT:-}
       - OVERWRITECONDADDR=${OVERWRITECONDADDR:-}
+      - VIRTUAL_HOST=${VIRTUAL_HOST:-}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST:-}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-}
     networks:
       - proxy-tier
       - default
  
 #https://github.com/nextcloud/docker/blob/master/.examples/docker-compose/with-nginx-proxy/mariadb/apache/docker-compose.yml     
-#  proxy:
-#    build: ./proxy
-#    restart: always
-#    ports:
-#      - 80:80
-#      - 443:443
-#    labels:
-#      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-#    volumes:
-#      - certs:/etc/nginx/certs:ro
-#      - vhost.d:/etc/nginx/vhost.d
-#      - html:/usr/share/nginx/html
-#      - /var/run/docker.sock:/tmp/docker.sock:ro
-#    networks:
-#      - proxy-tier
-#
-#  letsencrypt-companion:
-#    image: jrcs/letsencrypt-nginx-proxy-companion
-#    restart: always
-#    volumes:
-#      - certs:/etc/nginx/certs
-#      - vhost.d:/etc/nginx/vhost.d
-#      - html:/usr/share/nginx/html
-#      - /var/run/docker.sock:/var/run/docker.sock:ro
-#    networks:
-#      - proxy-tier
-#    depends_on:
-#      - proxy
-#volumes:
-#  db:
-#  nextcloud:
-#  certs:
-#  vhost.d:
-#  html:
+
+  proxy:
+    build: ./images/proxy
+    restart: always
+    ports:
+      - ${PORT_HTTP:-9080}:80
+      - ${PORT_HTTPS:-9443}:443
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    volumes:
+      - certs:/etc/nginx/certs:ro
+      - vhost.d:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - proxy-tier
+
+  letsencrypt-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost.d:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - proxy-tier
+    depends_on:
+      - proxy
+
+volumes:
+  certs:
+  vhost.d:
+  html:
 
 networks:
   proxy-tier:
