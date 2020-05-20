@@ -59,7 +59,7 @@ services:
     volumes:
       - ${DIR_CONFIG_NEXTCLOUD:-./data/nextcloud}/config:/var/www/html/config
       - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/apps:/var/www/html/apps
-      - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud/data}:/var/www/html/data
+      - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/data:/var/www/html/data
     environment:
 #      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER:-nextcloud}
 #      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD:-nextcloud}
