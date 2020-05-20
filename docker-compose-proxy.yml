@@ -25,6 +25,7 @@ services:
       - ${DIR_DATA_MARIADB:-./data/mariadb}/db:/var/lib/mysql
       - ${DIR_DATA_MARIADB:-./data/mariadb}/etc:/etc/mysql
       - ${DIR_DATA_MARIADB:-./data/mariadb}/init:/database-init
+      - ${DIR_DATA_MARIADB:-./data/mariadb}/init:/docker-entry-initdb
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-nextcloud}
       - MYSQL_USER=${MYSQL_USER:-nextcloud}
@@ -45,6 +46,7 @@ services:
       - DB_BACKUP_HOST=${MYSQL_CONTAINER:-nextcloud-mariadb}
       - DB_BACKUP_NAME=${MYSQL_DATABASE:-nextcloud}
       - DB_BACKUP_PASSWORD=${MYSQL_ROOT_PASSWORD:-randomPassword}
+      - DB_BACKUP_DATABASE=${MYSQL_DATABASE:-nextcloud}
     volumes:
       - ${DIR_DATA_BACKUP:-./data/backup}:/backup
       - ${DIR_DATA_MARIADB:-./data/mariadb}/init:/backup-latest
@@ -61,6 +63,7 @@ services:
       - ${PORT_HTTP:-9080}:80
       - ${PORT_HTTPS:-9443}:443
     volumes:
+#      - nextcloud:/var/www/html
       - ${DIR_CONFIG_NEXTCLOUD:-./data/nextcloud}/config:/var/www/html/config
       - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/apps:/var/www/html/apps
       - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/data:/var/www/html/data
@@ -130,6 +133,7 @@ services:
 #      - proxy
 
 volumes:
+  nextcloud:
   certs:
   vhost.d:
   html:

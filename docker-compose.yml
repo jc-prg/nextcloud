@@ -41,6 +41,7 @@ services:
       - DB_BACKUP_HOST=${MYSQL_CONTAINER:-nextcloud-mariadb}
       - DB_BACKUP_NAME=${MYSQL_DATABASE:-nextcloud}
       - DB_BACKUP_PASSWORD=${MYSQL_ROOT_PASSWORD:-randomPassword}
+      - DB_BACKUP_DATABASE=${MYSQL_DATABASE:-nextcloud}
     volumes:
       - ${DIR_DATA_BACKUP:-./data/backup}:/backup
       - ${DIR_DATA_MARIADB:-./data/mariadb}/init:/backup-latest
@@ -57,10 +58,11 @@ services:
       - ${PORT_HTTP:-9080}:80
       - ${PORT_HTTPS:-9443}:443
     volumes:
+#      - nextcloud:/var/www/html
       - ${DIR_CONFIG_NEXTCLOUD:-./data/nextcloud}/config:/var/www/html/config
       - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/apps:/var/www/html/apps
       - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/data:/var/www/html/data
-    environment:
+   environment:
 #      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER:-nextcloud}
 #      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD:-nextcloud}
       - NEXTCLOUD_DATA_DIR=${NEXTCLOUD_DATA_DIR:-/var/www/html/data}
