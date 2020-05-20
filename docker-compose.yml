@@ -13,7 +13,7 @@ version: '3'
 services:
 
   db:
-    container_name: ${MYSQL_CONTAINER:-nextcloud-mariadb}
+      container_name: ${MYSQL_CONTAINER:-nextcloud-mariadb}
     build: ${MYSQL_IMAGE:-./images/mariadb}
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     restart: unless-stopped
@@ -58,7 +58,6 @@ services:
       - ${PORT_HTTP:-9080}:80
       - ${PORT_HTTPS:-9443}:443
     volumes:
-#      - nextcloud:/var/www/html
       - ${DIR_CONFIG_NEXTCLOUD:-./data/nextcloud}/config:/var/www/html/config
       - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/apps:/var/www/html/apps
       - ${DIR_DATA_NEXTCLOUD:-./data/nextcloud}/data:/var/www/html/data
