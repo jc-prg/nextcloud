@@ -1,2 +1,1 @@
-FROM yobasystems/alpine-mariadb:armhf
-#FROM blepiolot/rpi-mariadb:latest
+FROM blepiolot/rpi-mariadb:latest
