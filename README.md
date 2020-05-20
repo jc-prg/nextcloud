@@ -5,7 +5,7 @@ My individual combination of NextCloud configurations ... the goal is:
 * NextCloud incl. Maria DB running on Ubuntu _or_ Raspberry (OK)
 * Cron active from installation (OK)
 * DB Backup (OK)
-* DB Restore (IN PROGRESS)
+* DB Restore (manually - OK, automatically - IN PROGRESS)
 * Proxy incl. letsencrypt (IN PROGRESS)
 * Login Data, Trusted Domains etc. active from installation (OPEN)
 
