@@ -91,6 +91,9 @@ services:
       - OVERWRITEPROTOCOL=${OVERWRITEPROTOCOL:-}
       - OVERWRITEWEBROOT=${OVERWRITEWEBROOT:-}
       - OVERWRITECONDADDR=${OVERWRITECONDADDR:-}
+      - VIRTUAL_HOST=${VIRTUAL_HOST:-}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST:-}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-}
     networks:
       - proxy-tier
       - default
@@ -104,8 +107,8 @@ services:
     ports:
       - 80:80
       - 443:443
-#    labels:
-#      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
     volumes:
       - certs:/etc/nginx/certs:ro
       - vhost.d:/etc/nginx/vhost.d
@@ -117,22 +120,21 @@ services:
       - proxy-tier
 
 
-#  letsencrypt-companion:
-#    container_name: nextcloud-letsencrypt
-#    image: jrcs/letsencrypt-nginx-proxy-companion
-#    restart: always
-#    volumes:
-#      - certs:/etc/nginx/certs
-#      - vhost.d:/etc/nginx/vhost.d
-#      - html:/usr/share/nginx/html
-#      - /var/run/docker.sock:/var/run/docker.sock:ro
-#    networks:
-#      - proxy-tier
-#    depends_on:
-#      - proxy
+  letsencrypt-companion:
+    container_name: ${LETSENCRYPT_CONTAINER:-nextcloud-letsencrypt}
+    image: ${LETSENCRYPT_IMAGE:-jrcs/letsencrypt-nginx-proxy-companion}
+    restart: always
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost.d:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - proxy-tier
+    depends_on:
+      - proxy
 
 volumes:
-  nextcloud:
   certs:
   vhost.d:
   html:
