@@ -1,0 +1,100 @@
+#!/bin/bash
+
+user=`whoami`
+source=../.env
+nc_container=${NEXTCLOUD_CONTAINER:-nextcloud-app}
+
+echo
+echo "-------------------------------------"
+echo " Start jc://cloud/maintain/"
+echo " (by Christoph Kloth)"
+echo "-------------------------------------"
+
+if [ $user != "root" ]; then 
+  echo
+  echo "Please run as root!"
+  exit 0
+fi
+
+#------------------------------------------
+
+nc_exec() {
+   docker exec -u www-data -it $nc_container /var/www/html/occ $0 $1 $2
+   }
+
+nc_apps_list() {
+   echo "List available NextCloud apps"
+   nc_exec app:list
+   }
+   
+nc_apps_install() {
+   echo "Install NextCloud app: $0"
+   nc_exec app:install $0
+   nc_exec app:enable $0
+   }
+   
+nc_files_cleanup() {
+   # see https://docs.nextcloud.com/server/15/admin_manual/configuration_server/occ_command.html#file-operations-label
+   echo "cleanup filecache"
+   nc_exec files:cleanup
+   }
+
+nc_files_rescan() {
+   # see https://docs.nextcloud.com/server/15/admin_manual/configuration_server/occ_command.html#file-operations-label
+   echo "rescan filesystem"
+   nc_exec files:scan --all
+   }
+   
+nc_config_set() {
+   # see https://docs.nextcloud.com/server/15/admin_manual/configuration_server/occ_command.html#config-commands-label
+   echo "set value in config-file"
+   nc_exec config:system:set $0 $1 $2 $3
+   }
+
+#------------------------------------------
+
+if [ ! $config ]; then
+  echo
+  echo "Press key - your options:"
+  echo " 'q' - exit"
+  echo " '1' - list nextcloud apps"
+  echo " '2' - install known nextcloud app"
+  echo " '3' - cleanup filecache"
+  echo " '4' - rescan filesystem"
+  count=0
+  while : ; do
+    read -n 1 k <&1
+    if [[ $k = q ]] ; then
+       printf "\n... quitting the program.\n"
+       exit 0
+    elif [[ $k = 1 ]] ; then
+       config="list"
+       break
+    elif [[ $k = 2 ]] ; then
+       config="install"
+       break
+    elif [[ $k = 3 ]] ; then
+       config="rescan"
+       break
+    elif [[ $k = 4 ]] ; then
+       config="cleanup"
+       break
+    else
+       ((count=$count+1))
+       printf "\nIterate for  times\n"
+       echo "Press 'q' to exit"
+    fi
+  done
+fi
+
+if [ $config == "list" ]; then
+    nc_apps_list
+elif [ $config == "install" ]; then
+    nc_apps_install
+else
+    echo "unknown command: $0"
+fi 
+
+
+echo
+echo "Done."
