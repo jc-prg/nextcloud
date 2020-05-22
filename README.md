@@ -6,39 +6,46 @@ My individual combination of NextCloud configurations ... the goal is:
 * Cron active from installation (OK)
 * DB Backup (OK)
 * DB Restore (OK)
-* Proxy incl. letsencrypt (IN PROGRESS)
 * Login Data, Trusted Domains etc. active from installation (OPEN)
 
 Why? Coming from ownCloud I realized how easy it is get NextCloud up and running and how much samples for docker and docker-compose are available.
 The goal is to have a fully working installation which can be configured in a single config file and which works on Raspberry Pi as well as on an amd64 architecture.
 
+## Limitations
+
+* ONLY OFFICE doesn't work on arm architecture in this package
+* Install proxy incl. SSL first not to get problems with some nextcloud apps
+
 ## Installation
 
 1. Prerequistes: linux server with docker and docker-compose
 
-2. Download ...
+2. Configure separate proxy server incl. letsencrypt (e.g. https://github.com/jc-prg/proxy)
+
+3. Download ...
 
 ```bash
 $ git clone https://github.com/jc-prg/nextcloud.git
 $ cd nextcloud/
 ```
 
-3. Create and edit configuration file (default is amd64 architecture, config for arm e.g. Raspberry Pi existing and tested)
+4. Create and edit configuration file (default is amd64 architecture, config for arm e.g. Raspberry Pi existing and tested)
 
 ```bash
 $ cp sample.env .env
 $ nano .env
 $ ./gen-password
+
+# if you're using an Raspberry Pi or other arm architecture
+$ ./gen-arm-architecture 
 ```
 
-4. Build container and first start
+5. Build container and first start
 
 ```bash
 $ docker-compose build
 $ docker-compose up -d
 ```
-
-5. Configure separate proxy server incl. letsencrypt, if required (included proxy in progress but not ready yet)
 
 6. Run the first time and create admin account
 
@@ -50,7 +57,6 @@ $ docker-compose up -d
        2 => '<your 3rd domain>',
     ),
     ```
-
 
 ## Sources and inspiration (in progress)
 
