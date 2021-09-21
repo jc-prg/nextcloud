@@ -19,7 +19,8 @@ fi
 #------------------------------------------
 
 nc_exec() {
-   docker exec -u www-data -it $nc_container /var/www/html/occ $0 $1 $2
+   echo "execute /var/www/html/occ $1 $2 $3"
+   docker exec -u www-data -it $nc_container /var/www/html/occ $1 $2 $3
    }
 
 nc_apps_list() {
@@ -59,8 +60,8 @@ if [ ! $config ]; then
   echo " 'q' - exit"
   echo " '1' - list nextcloud apps"
   echo " '2' - install known nextcloud app"
-  echo " '3' - cleanup filecache"
-  echo " '4' - rescan filesystem"
+  echo " '3' - rescan filesystem"
+  echo " '4' - cleanup filecache"
   count=0
   while : ; do
     read -n 1 k <&1
@@ -89,6 +90,10 @@ fi
 
 if [ $config == "list" ]; then
     nc_apps_list
+elif [ $config == "rescan" ]; then
+    nc_files_rescan
+elif [ $config == "cleanup" ]; then
+    nc_files_cleanup
 elif [ $config == "install" ]; then
     nc_apps_install
 else
@@ -98,3 +103,5 @@ fi
 
 echo
 echo "Done."
+
+
