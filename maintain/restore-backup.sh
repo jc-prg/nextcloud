@@ -1,2 +1,4 @@
 #!/bin/bash
-docker exec -it nextcloud-mariadb-backup /restore_backup.sh
+backup=${DB_BACKUP_CONTAINER:-nextcloud-mariadb-backup}
+
+docker exec -it $backup /restore_backup.sh
