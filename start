@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+
+source_file="./.env"
+source $source_file
+docker=${PATH_DOCKER_COMPOSE:-/usr/bin/docker-compose}
+
+echo
+echo "-------------------------------------"
+echo " Start jc://nextcloud/"
+echo "-------------------------------------"
+echo
+echo "Source file:     $source_file"
+echo "Port http/https: ${PORT_HTTP:-default}/${PORT_HTTPS:-default}"
+echo "Image Nextcloud: ${NEXTCLOUD_IMAGE:-default}"
+echo "Image MariaDB:   ${MYSQL_IMAGE:-default}"
+echo
+
+$docker up -d
