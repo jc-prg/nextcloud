@@ -1,4 +1,4 @@
-# NextCloud
+# NextCloud (v22.1.1)
 
 My individual combination of NextCloud configurations ... the goal is:
 
@@ -6,7 +6,7 @@ My individual combination of NextCloud configurations ... the goal is:
 * Cron active from installation (OK)
 * DB Backup (OK)
 * DB Restore (OK)
-* Login Data, Trusted Domains etc. active from installation (OPEN)
+* Login Data, Trusted Domains etc. active from installation (IN PROGRESS)
 
 Why? Coming from ownCloud I realized how easy it is get NextCloud up and running and how much samples for docker and docker-compose are available.
 The goal is to have a fully working installation which can be configured in a single config file and which works on Raspberry Pi as well as on an amd64 architecture.
