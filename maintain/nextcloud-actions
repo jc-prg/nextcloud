@@ -46,6 +46,26 @@ nc_files_rescan() {
    nc_exec files:scan --all
    }
    
+nc_db_add_primarykeys() {
+   # see https://docs.nextcloud.com/server/15/admin_manual/configuration_server/occ_command.html#file-operations-label
+   echo "add missing primary keys"
+   nc_exec db:add-missing-primary-keys
+   }
+
+nc_db_add_indices() {
+   # see https://docs.nextcloud.com/server/15/admin_manual/configuration_server/occ_command.html#file-operations-label
+   echo "add missing indices"
+   nc_exec db:add-missing-indices
+   }
+
+nc_db_convert_bigint() {
+   # see https://docs.nextcloud.com/server/15/admin_manual/configuration_server/occ_command.html#file-operations-label
+   echo "convert to bigint"
+   nc_exec maintenance:mode --on
+   nc_exec db:convert-filecache-bigint --no-interaction
+   nc_exec maintenance:mode --off
+   }
+
 nc_config_set() {
    # see https://docs.nextcloud.com/server/15/admin_manual/configuration_server/occ_command.html#config-commands-label
    echo "set value in config-file"
@@ -62,6 +82,9 @@ if [ ! $config ]; then
   echo " '2' - install known nextcloud app"
   echo " '3' - rescan filesystem"
   echo " '4' - cleanup filecache"
+  echo " '5' - add missing indices"
+  echo " '6' - add missing primary keys"
+  echo " '7' - convert columns to bigint if missing"
   count=0
   while : ; do
     read -n 1 k <&1
@@ -80,6 +103,15 @@ if [ ! $config ]; then
     elif [[ $k = 4 ]] ; then
        config="cleanup"
        break
+    elif [[ $k = 5 ]] ; then
+       config="indices"
+       break
+    elif [[ $k = 6 ]] ; then
+       config="primarykeys"
+       break
+    elif [[ $k = 7 ]] ; then
+       config="bigint"
+       break
     else
        ((count=$count+1))
        printf "\nIterate for  times\n"
@@ -96,6 +128,12 @@ elif [ $config == "cleanup" ]; then
     nc_files_cleanup
 elif [ $config == "install" ]; then
     nc_apps_install
+elif [ $config == "indices" ]; then
+    nc_db_add_indices
+elif [ $config == "primarykeys" ]; then
+    nc_db_add_primarykeys
+elif [ $config == "bigint" ]; then
+    nc_db_convert_bigint
 else
     echo "unknown command: $0"
 fi 
@@ -103,5 +141,3 @@ fi
 
 echo
 echo "Done."
-
-
