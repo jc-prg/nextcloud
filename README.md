@@ -57,6 +57,10 @@ $ docker-compose up -d
        2 => '<your 3rd domain>',
     ),
     ```
+8. Add background jobs to crontab
+```
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /<dir-to-your-installation>/maintain/nextcloud-actions background
+```
 
 ## Sources and inspiration (in progress)
 

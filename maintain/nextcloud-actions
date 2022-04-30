@@ -3,6 +3,7 @@
 user=`whoami`
 source=../.env
 nc_container=${NEXTCLOUD_CONTAINER:-nextcloud-app}
+config=$1
 
 echo
 echo "-------------------------------------"
@@ -67,7 +68,7 @@ nc_db_convert_bigint() {
    }
 
 nc_db_background() {
-   echo "execute /var/www/html/occ $1 $2 $3"
+   echo "execute /var/www/html/cron.php"
    docker exec -u www-data -it $nc_container php /var/www/html/cron.php
    }
 
