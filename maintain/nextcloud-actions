@@ -153,6 +153,8 @@ if [ ! $config ]; then
   done
 fi
 
+echo
+
 if [ $config == "list" ]; then
     nc_apps_list
 elif [ $config == "status" ]; then
