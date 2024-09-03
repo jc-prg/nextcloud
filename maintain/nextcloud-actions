@@ -97,7 +97,7 @@ if [ ! $config ]; then
   echo " '6' - add missing primary keys [primarykeys]"
   echo " '7' - convert columns to bigint if missing [bigint]"
   echo " '8' - run background tasks [background]"
-  echo " '9' - try to update nextcloud"
+  echo " '9' - try to update nextcloud (${NEXTCLOUD_IMAGE})"
   count=0
   while : ; do
     read -n 1 k <&1
