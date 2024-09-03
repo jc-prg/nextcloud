@@ -20,6 +20,7 @@ fi
 #------------------------------------------
 
 nc_exec() {
+   echo
    echo "execute php /var/www/html/occ $1 $2 $3"
    docker exec -u www-data -it $nc_container php /var/www/html/occ $1 $2 $3
    }
@@ -153,6 +154,7 @@ if [ ! $config ]; then
   done
 fi
 
+echo
 echo
 
 if [ $config == "list" ]; then
