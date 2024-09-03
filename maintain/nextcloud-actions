@@ -90,8 +90,7 @@ nc_config_updater() {
   nc_exec update:check
   nc_exec app:update --all
   nc_exec upgrade
-  nc_exec update
-  nc_exec maintenance:mode --off
+  #nc_exec maintenance:mode --off
   }
 
 #------------------------------------------
