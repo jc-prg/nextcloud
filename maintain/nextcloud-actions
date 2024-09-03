@@ -80,7 +80,11 @@ nc_config_set() {
 
 nc_config_updater() {
   echo "try to update nextcloud"
-  nc_exec upgrade -v
+  nc_exec maintenance:mode --on
+  nc_exec update:check
+  nc_exec app:update --all
+  nc_exec upgrade
+  nc_exec maintenance:mode --off
   }
 
 #------------------------------------------
