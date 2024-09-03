@@ -49,9 +49,9 @@ services:
 
 
   app:
-    container_name: ${NEXTCLOUD_CONTAINER:-nextcloud-app}
+    container_name: ${NEXTCLOUD_CONTAINER:-nextcloud-app-24}
     build: 
-      context: ${NEXTCLOUD_IMAGE:-./images/nextcloud}
+      context: ${NEXTCLOUD_IMAGE:-./images/nextcloud_24}
     depends_on:
       - db
     restart: unless-stopped
