@@ -155,7 +155,7 @@ elif [ $config == "bigint" ]; then
     nc_db_convert_bigint
 elif [ $config == "background" ]; then
     nc_db_background
-elif [ $config == "background" ]; then
+elif [ $config == "update" ]; then
     nc_config_updater
 else
     echo "unknown command: $0"
