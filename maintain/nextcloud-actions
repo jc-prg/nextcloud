@@ -83,7 +83,7 @@ nc_config_updater() {
   # nc_exec maintenance:mode --on
   nc_exec update:check
   nc_exec app:update --all
-  nc_exec maintenance:upgrade
+  nc_exec maintenance:update
   nc_exec maintenance:mode --off
   }
 
