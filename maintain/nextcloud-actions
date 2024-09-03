@@ -78,6 +78,11 @@ nc_config_set() {
    nc_exec config:system:set $0 $1 $2 $3
    }
 
+nc_config_updater() {
+  echo "try to update nextcloud"
+  nc_exec upgrade -v
+  }
+
 #------------------------------------------
 
 if [ ! $config ]; then
@@ -92,6 +97,7 @@ if [ ! $config ]; then
   echo " '6' - add missing primary keys [primarykeys]"
   echo " '7' - convert columns to bigint if missing [bigint]"
   echo " '8' - run background tasks [background]"
+  echo " '9' - try to update nextcloud"
   count=0
   while : ; do
     read -n 1 k <&1
@@ -122,6 +128,9 @@ if [ ! $config ]; then
     elif [[ $k = 8 ]] ; then
        config="background"
        break
+    elif [[ $k = 9 ]] ; then
+       config="update"
+       break
     else
        ((count=$count+1))
        printf "\nIterate for  times\n"
@@ -146,6 +155,8 @@ elif [ $config == "bigint" ]; then
     nc_db_convert_bigint
 elif [ $config == "background" ]; then
     nc_db_background
+elif [ $config == "background" ]; then
+    nc_config_updater
 else
     echo "unknown command: $0"
 fi 
