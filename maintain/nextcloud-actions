@@ -24,6 +24,12 @@ nc_exec() {
    docker exec -u www-data -it $nc_container php /var/www/html/occ $1 $2 $3
    }
 
+nc_status() {
+   echo "show status"
+   #nc_exec -V
+   nc_exec status
+   }
+
 nc_apps_list() {
    echo "List available NextCloud apps"
    nc_exec app:list
@@ -83,7 +89,8 @@ nc_config_updater() {
   # nc_exec maintenance:mode --on
   nc_exec update:check
   nc_exec app:update --all
-  nc_exec maintenance:update
+  nc_exec upgrade
+  nc_exec update
   nc_exec maintenance:mode --off
   }
 
@@ -93,6 +100,7 @@ if [ ! $config ]; then
   echo
   echo "Press key - your options:"
   echo " 'q' - exit"
+  echo " '0' - status"
   echo " '1' - list nextcloud apps [list]"
   echo " '2' - install known nextcloud app [install]"
   echo " '3' - rescan filesystem [rescan]"
@@ -108,6 +116,9 @@ if [ ! $config ]; then
     if [[ $k = q ]] ; then
        printf "\n... quitting the program.\n"
        exit 0
+    elif [[ $k = 0 ]] ; then
+       config="status"
+       break
     elif [[ $k = 1 ]] ; then
        config="list"
        break
@@ -145,6 +156,8 @@ fi
 
 if [ $config == "list" ]; then
     nc_apps_list
+elif [ $config == "status" ]; then
+    nc_status
 elif [ $config == "rescan" ]; then
     nc_files_rescan
 elif [ $config == "cleanup" ]; then
