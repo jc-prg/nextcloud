@@ -4,6 +4,7 @@ FROM php:8.1-apache-bullseye
 ENV NEXTCLOUD_VERSION 31.0.4
 ENV NEXTCLOUD_KEY 28806A878AE423A28372792ED75899B9A724937A
 
+
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
     \
